@@ -1,0 +1,27 @@
+import axios from "axios";
+
+const URL = 'https://pixabay.com/api/';
+const KEY = '29034983-efec06dd5286ef1d9795c8211';
+const LIMIT = 12;
+const TYPE = 'photo';
+const ORIENTATION = 'horisontal';
+
+const instance = axios.create({
+    baseURL: URL,
+    params: {
+        key: KEY,
+        image_type: TYPE,
+        orientation: ORIENTATION,
+        per_page: LIMIT,
+    }
+});
+
+export const searchImages = async (q, page) => {
+    const { data } = await instance.get('/', {
+        params: {
+            q,
+            page,
+        }
+    });
+    return data;
+}
