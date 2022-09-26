@@ -4,7 +4,7 @@ const URL = 'https://pixabay.com/api/';
 const KEY = '29034983-efec06dd5286ef1d9795c8211';
 const LIMIT = 12;
 const TYPE = 'photo';
-const ORIENTATION = 'horisontal';
+const ORIENTATION = 'horizontal';
 
 const instance = axios.create({
     baseURL: URL,

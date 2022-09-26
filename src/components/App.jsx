@@ -22,7 +22,12 @@ export class App extends Component {
         const { q, page } = this.state;
         if ((q && prevState.q !== q) || page > prevState.page) {
             this.fetchImages(q, page);
-        }
+      }
+        if (prevState.q !== q) {
+        this.setState({
+          images: []
+        })
+      }
     }
 
     async fetchImages() {
@@ -93,3 +98,4 @@ export class App extends Component {
         )
     }
 }
+
