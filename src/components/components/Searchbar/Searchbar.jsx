@@ -31,7 +31,7 @@ export class Searchbar extends Component {
     render() {
         return (
         <header className={css.searchbar}>
-                <form className={css.form} onSubmit={this.onSubmit}>
+            <form className={css.form} onSubmit={this.onSubmit}>
                 <input
                     className={css.input}
                     name="q"

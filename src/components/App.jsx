@@ -2,6 +2,7 @@ import { Component } from "react";
 import { searchImages } from "shared/api/images";
 import { ImageGallery } from "./components/ImageGallery/ImageGallery";
 import { Searchbar } from "./components/Searchbar/Searchbar";
+import { Loader } from "./components/Loader/Loader";
 
 export class App extends Component {
   state = {
@@ -80,6 +81,7 @@ export class App extends Component {
         return (
           <>
             <Searchbar onSubmit={onSearch} />
+            {isLoading && <Loader />}
             {isImages && <ImageGallery images={images} onClick={openModal} />}
           </>
         )
