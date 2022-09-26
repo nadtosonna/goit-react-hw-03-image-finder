@@ -3,6 +3,8 @@ import { searchImages } from "shared/api/images";
 import { ImageGallery } from "./components/ImageGallery/ImageGallery";
 import { Searchbar } from "./components/Searchbar/Searchbar";
 import { Loader } from "./components/Loader/Loader";
+import { Notify } from 'notiflix';
+import { Modal } from "./components/Modal/Modal";
 
 export class App extends Component {
   state = {
@@ -13,7 +15,7 @@ export class App extends Component {
     total: 0,
     error: null,
     modalOpen: false,
-    largeImageUrl: '',
+    largeImageURL: '',
   };
 
     componentDidUpdate(_, prevState) {
@@ -61,20 +63,22 @@ export class App extends Component {
     });
   }
 
-  openModal = (largeImageUrl) => {
+  openModal = largeImageURL => {
     this.setState({
-      modalOpen: true
+      modalOpen: true,
+      largeImageURL,
     })
   }
 
   closeModal = () => {
     this.setState({
-      modalOpen: false
+      modalOpen: false,
+      largeImageURL: '',
     })
   }
 
     render() {
-        const { images, isLoading, error, modalOpen } = this.state;
+        const { images, isLoading, error, modalOpen, largeImageURL } = this.state;
         const isImages = Boolean(images.length);
         const { onSearch, onloadMore, openModal, closeModal } = this;
 
@@ -82,7 +86,9 @@ export class App extends Component {
           <>
             <Searchbar onSubmit={onSearch} />
             {isLoading && <Loader />}
+            {error && Notify.failure('Please try again later!')}
             {isImages && <ImageGallery images={images} onClick={openModal} />}
+            {modalOpen && <Modal onClose={closeModal}> <img src={largeImageURL} alt="" /></Modal>}
           </>
         )
     }
