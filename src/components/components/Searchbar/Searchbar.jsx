@@ -8,15 +8,15 @@ export class Searchbar extends Component {
         query: '',
     }
 
-    onChange = e => {
-        const { value, name } = e.currentTarget;
+    onChange = event => {
+        const { value, name } = event.currentTarget;
         this.setState({
             [name]: value
         })
     }
     
-    onSubmit = e => {
-        e.preventDefault();
+    onSubmit = event => {
+        event.preventDefault();
 
         if (this.state.query.trim() === '') {
             Notify.failure('Enter your search request, please!');
