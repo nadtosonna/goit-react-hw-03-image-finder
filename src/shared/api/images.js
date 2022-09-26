@@ -16,10 +16,10 @@ const instance = axios.create({
     }
 });
 
-export const searchImages = async (query, page) => {
+export const searchImages = async (q, page) => {
     const { data } = await instance.get('/', {
         params: {
-            query,
+            q,
             page,
         }
     });
