@@ -5,7 +5,7 @@ import css from './Searchbar.module.css';
 
 export class Searchbar extends Component {
     state = {
-        q: '',
+        query: '',
     }
 
     onChange = e => {
@@ -18,13 +18,13 @@ export class Searchbar extends Component {
     onSubmit = e => {
         e.preventDefault();
 
-        if (this.state.q.trim() === '') {
+        if (this.state.query.trim() === '') {
             Notify.failure('Enter your search request, please!');
             return;
         }
-        this.props.onSubmit(this.state.q);
+        this.props.onSubmit(this.state.query);
         this.setState({
-            q: ''
+            query: ''
         })
     }
 
@@ -34,13 +34,13 @@ export class Searchbar extends Component {
             <form className={css.form} onSubmit={this.onSubmit}>
                 <input
                     className={css.input}
-                    name="q"
+                    name="query"
                     type="text"
                     autoComplete="off"
                     autoFocus
                     placeholder="Search images and photos"
                     onChange={this.onChange}
-                    value={this.state.q}
+                    value={this.state.query}
                     />
                     
                 <button type="submit" className={css.searchBtn}>

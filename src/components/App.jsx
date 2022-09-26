@@ -5,25 +5,25 @@ import { Searchbar } from "./components/Searchbar/Searchbar";
 import { Loader } from "./components/Loader/Loader";
 import { Notify } from 'notiflix';
 import { Modal } from "./components/Modal/Modal";
+import { LoadMoreButton } from "./components/Button/Button";
 
 export class App extends Component {
   state = {
-    q: '',
+    query: '',
     page: 1,
     images: [],
     isLoading: false,
-    total: 0,
     error: null,
     modalOpen: false,
     largeImageURL: '',
   };
 
     componentDidUpdate(_, prevState) {
-        const { q, page } = this.state;
-        if ((q && prevState.q !== q) || page > prevState.page) {
-            this.fetchImages(q, page);
+        const { query, page } = this.state;
+        if ((query && prevState.query !== query) || page > prevState.page) {
+            this.fetchImages(query, page);
       }
-        if (prevState.q !== q) {
+        if (prevState.query !== query) {
         this.setState({
           images: []
         })
@@ -31,16 +31,19 @@ export class App extends Component {
     }
 
     async fetchImages() {
-        const { q, page } = this.state;
+        const { query, page } = this.state;
         this.setState({
             isLoading: true,
         })
         try {
-            const data = await searchImages(q, page);
+          const data = await searchImages(query, page);
+          if (data.totalHits === 0) {
+            Notify.failure('No images found!');
+          } 
+
             this.setState(({ images }) => {
                 return {
                   images: [...images, ...data.hits],
-                  total: data.totalHits,
                 }
             })
         } catch (error) {
@@ -54,13 +57,13 @@ export class App extends Component {
         }
     }
 
-  onSearch = q => {
+  onSearch = query => {
       this.setState({
-          q,
+          query,
       })
   }
   
-  onloadMore = () => {
+  onLoadMore = () => {
     this.setState(({ page }) => {
       return {
         page: page + 1,
@@ -85,7 +88,7 @@ export class App extends Component {
     render() {
         const { images, isLoading, error, modalOpen, largeImageURL } = this.state;
         const isImages = Boolean(images.length);
-        const { onSearch, onloadMore, openModal, closeModal } = this;
+        const { onSearch, onLoadMore, openModal, closeModal } = this;
 
         return (
           <>
@@ -93,6 +96,7 @@ export class App extends Component {
             {isLoading && <Loader />}
             {error && Notify.failure('Please try again later!')}
             {isImages && <ImageGallery images={images} onClick={openModal} />}
+            {images.length > 0 && <LoadMoreButton onLoadMore={onLoadMore} />}
             {modalOpen && <Modal onClose={closeModal}> <img src={largeImageURL} alt="" /></Modal>}
           </>
         )
