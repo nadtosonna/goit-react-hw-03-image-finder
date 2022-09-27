@@ -16,6 +16,7 @@ export class App extends Component {
     error: null,
     modalOpen: false,
     largeImageURL: '',
+    total: 0,
   };
 
     componentDidUpdate(_, prevState) {
@@ -24,8 +25,8 @@ export class App extends Component {
             this.fetchImages(query, page);
       }
         if (prevState.query !== query) {
-        this.setState({
-          images: []
+          this.setState({
+          images: [],
         })
       }
     }
@@ -44,6 +45,7 @@ export class App extends Component {
             this.setState(({ images }) => {
                 return {
                   images: [...images, ...data.hits],
+                  total: data.totalHits,
                 }
             })
         } catch (error) {
@@ -58,9 +60,15 @@ export class App extends Component {
     }
 
   onSearch = query => {
-      this.setState({
-          query,
-      })
+    this.setState(prevState => {
+      if (prevState.query === query) {
+        return;
+      }
+      else return {
+        query,
+        page: 1,
+      }
+    });
   }
   
   onLoadMore = () => {
@@ -86,7 +94,7 @@ export class App extends Component {
   }
 
     render() {
-        const { images, isLoading, error, modalOpen, largeImageURL } = this.state;
+        const { images, isLoading, error, modalOpen, largeImageURL, total } = this.state;
         const isImages = Boolean(images.length);
         const { onSearch, onLoadMore, openModal, closeModal } = this;
 
@@ -96,7 +104,7 @@ export class App extends Component {
             {isLoading && <Loader />}
             {error && Notify.failure('Please try again later!')}
             {isImages && <ImageGallery images={images} onClick={openModal} />}
-            {images.length > 0 && <LoadMoreButton onLoadMore={onLoadMore} />}
+            {images.length > 0 && images.length < total && <LoadMoreButton onLoadMore={onLoadMore} />}
             {modalOpen && <Modal onClose={closeModal}> <img src={largeImageURL} alt="" /></Modal>}
           </>
         )
