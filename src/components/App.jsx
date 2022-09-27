@@ -6,6 +6,7 @@ import { Loader } from "./components/Loader/Loader";
 import { Notify } from 'notiflix';
 import { Modal } from "./components/Modal/Modal";
 import { LoadMoreButton } from "./components/Button/Button";
+import { Section } from "./components/Section/Section";
 
 export class App extends Component {
   state = {
@@ -103,9 +104,11 @@ export class App extends Component {
             <Searchbar onSubmit={onSearch} />
             {isLoading && <Loader />}
             {error && Notify.failure('Please try again later!')}
+            <Section>
             {isImages && <ImageGallery images={images} onClick={openModal} />}
             {images.length > 0 && images.length < total && <LoadMoreButton onLoadMore={onLoadMore} />}
             {modalOpen && <Modal onClose={closeModal}> <img src={largeImageURL} alt="" /></Modal>}
+            </Section>
           </>
         )
     }
